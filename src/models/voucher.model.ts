@@ -17,8 +17,8 @@ const voucherSchema = new Schema<Voucher>(
       required: true,
     },
     voucherType: {
-      type: String,
-       
+      type: String, 
+      enum: ['percentage', 'fixed', 'shipping'],
     },
     voucherAmount: {
       type: Number,
@@ -31,6 +31,8 @@ const voucherSchema = new Schema<Voucher>(
     voucherStatus: {
       type: String,
       required: true,
+      enum: ['active', 'inactive'],
+  default: 'active'
     },
   },
   {
