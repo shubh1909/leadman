@@ -4,6 +4,7 @@ import { Lead } from "@/models/lead.model";
 import { ApiError } from "@/utils/ApiError";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import { ApiResponse } from "@/utils/ApiResponse";
+import { error } from "console";
 
 export async function POST(req: Request) {
   await dbConnect();
@@ -15,15 +16,13 @@ export async function POST(req: Request) {
     const { userName, phoneNumber } = await req.json();
 
     if (!userName || !phoneNumber) {
-      throw new ApiError(400, [], "Invalid request data");
+      return ApiError("username or phone number is missing", 400);
     }
-
-     
 
     // Check if the lead already exists
     const existingLead = await Lead.findOne({ phoneNumber });
     if (existingLead) {
-      throw new ApiError(400, [], "Lead already exists");
+      return ApiError("Lead already exists", 400);
     }
 
     // Create a new lead
@@ -40,6 +39,6 @@ export async function POST(req: Request) {
     );
   } catch (error) {
     console.error("Error creating lead:", error);
-    throw new ApiError(500, [error], "Internal Server Error");
+    return ApiError("Internal Server Error", 500, error);
   }
 }

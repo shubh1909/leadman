@@ -6,6 +6,7 @@ export interface Lead extends Document {
   lastVisited: Date;
   visitedCount: number;
   vouchers: [];
+  reviews: [];
   createdAt: Date;
   updatedAt: Date;
 }
@@ -34,11 +35,18 @@ const leadSchema = new Schema<Lead>(
       default: 0,
       required: true,
     },
-    vouchers: {
-      type: [mongoose.Schema.Types.ObjectId],
-      ref: "Voucher",
-      default: [],
-    },
+    vouchers: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Voucher",
+      },
+    ],
+    reviews: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Review",
+      },
+    ],
   },
   {
     timestamps: true,

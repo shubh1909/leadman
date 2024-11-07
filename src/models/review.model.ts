@@ -17,5 +17,5 @@ const reviewSchema = new Schema<review>(
   }
 );
 
-export const review =
+export const Review =
   mongoose.models.review || mongoose.model<review>("review", reviewSchema);

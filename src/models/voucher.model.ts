@@ -1,4 +1,4 @@
-import mongoose,{Schema} from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
 export interface Voucher extends Document {
   voucherCode: string;
@@ -6,6 +6,7 @@ export interface Voucher extends Document {
   voucherAmount: number;
   voucherExpiryDate: Date;
   voucherStatus: string;
+  attachedTo: [];
   createdAt: Date;
   updatedAt: Date;
 }
@@ -15,10 +16,11 @@ const voucherSchema = new Schema<Voucher>(
     voucherCode: {
       type: String,
       required: true,
+      unique: true,
     },
     voucherType: {
-      type: String, 
-      enum: ['percentage', 'fixed', 'shipping'],
+      type: String,
+      enum: ["percentage", "fixed", "shipping"],
     },
     voucherAmount: {
       type: Number,
@@ -31,13 +33,20 @@ const voucherSchema = new Schema<Voucher>(
     voucherStatus: {
       type: String,
       required: true,
-      enum: ['active', 'inactive'],
-  default: 'active'
+      enum: ["active", "inactive"],
+      default: "active",
     },
+    attachedTo: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Lead",
+      },
+    ],
   },
   {
     timestamps: true,
   }
 );
 
-export const Voucher = mongoose.models.Voucher || mongoose.model<Voucher>("Voucher", voucherSchema);
+export const Voucher =
+  mongoose.models.Voucher || mongoose.model<Voucher>("Voucher", voucherSchema);
